@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { defaultTasks } from "../default-tasks";
 import { Task, TaskStatus } from "../tasks.types";
+import { useCopilotReadable } from "@copilotkit/react-core";
 
 let nextId = defaultTasks.length + 1;
 
@@ -15,6 +16,11 @@ const TasksContext = createContext<TasksContextType | undefined>(undefined);
 
 export const TasksProvider = ({ children }: { children: ReactNode }) => {
   const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+
+  useCopilotReadable({
+    description: "The state of the todo list",
+    value: JSON.stringify(tasks)
+  });
 
   const addTask = (title: string) => {
     setTasks([...tasks, { id: nextId++, title, status: TaskStatus.todo }]);
